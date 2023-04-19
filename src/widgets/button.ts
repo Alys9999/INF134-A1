@@ -52,6 +52,7 @@ class Button extends Widget{
         this._group = (this.parent as Window).window.group();
         this._rect = this._group.rect(this.width, this.height);
         this._rect.stroke("black");
+
         this._text = this._group.text(this._input);
         // Set the outer svg element 
         this.outerSvg = this._group;
@@ -90,28 +91,28 @@ class Button extends Widget{
     //TODO: give the states something to do! Use these methods to control the visual appearance of your
     //widget
     idleupState(): void {
-        throw new Error("Method not implemented.");
+       
     }
     idledownState(): void {
-        throw new Error("Method not implemented.");
+       
     }
     pressedState(): void {
-        throw new Error("Method not implemented.");
+       
     }
     hoverState(): void {
-        throw new Error("Method not implemented.");
+       
     }
     hoverPressedState(): void {
-        throw new Error("Method not implemented.");
+       
     }
     pressedoutState(): void {
-        throw new Error("Method not implemented.");
+       
     }
     moveState(): void {
-        throw new Error("Method not implemented.");
+       
     }
     keyupState(keyEvent?: KeyboardEvent): void {
-        throw new Error("Method not implemented.");
+
     }
 }
 
