@@ -66,6 +66,8 @@ class CButton extends Widget{
 
         if(this._circle != null)
             this._circle.fill(this.backcolor);
+        if(this._radius != null)
+            this._circle.radius(this._radius);
         
         super.update();
     }
@@ -93,7 +95,7 @@ class CButton extends Widget{
         return this._radius;
     }
 
-    onClick(callback:(event?:EventArgs)=>void):void{
+    onClick(callback:{(event?:any):void}):void{
        this.attach(callback)
     }
 
@@ -110,6 +112,7 @@ class CButton extends Widget{
     }
     pressReleaseState(): void {
         this.backcolor="#00FFCA";
+        this.raise(new EventArgs(this));
     }
     hoverState(): void {
         this.backcolor="#05BFDB";

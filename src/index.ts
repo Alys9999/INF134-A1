@@ -20,5 +20,12 @@ btn.move(12, 50);
 
 let btn2 = new CButton(w);
 btn2.tabindex = 3;
+btn2.fontSize = 32;
+btn2.setInput="Setted Label";
+btn2.setRadius=200;
 btn2.move(100, 100);
+
+btn2.onClick((event:any)=>{
+    lbl1.text="Fire";
+})
 
