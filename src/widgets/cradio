@@ -6,7 +6,7 @@ import {Rect, Text, Box} from "../core/ui";
 import {Circle} from "../core/ui";
 
 
-class CheckBox extends Widget{
+class CRadio extends Widget{
     private _circle: Circle;
     private _text: Text;
     private _fontSize: number;
@@ -14,6 +14,7 @@ class CheckBox extends Widget{
     private _text_y: number;
     private _text_x: number;
     private _radius: number;
+    private _
     private defaultText: string= "Check Box";
     private defaultFontSize: number = 12;
     private defaultRadius: number = 20
@@ -157,4 +158,4 @@ class CheckBox extends Widget{
     }
 }
 
-export {CheckBox}
+export {CRadio}
