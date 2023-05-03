@@ -277,7 +277,7 @@ class EventArgs {
 
 abstract class Component implements IAccessibility {
     public tabindex: number = 0;
-    private _handlers: { (event: EventArgs): void; }[] = [];
+    private _handlers: Map<WidgetState, (e: EventArgs)=>void> = new Map<WidgetState, (e: EventArgs)=>void>();
     protected _isselectable: boolean;
     protected state: WidgetState;
 
@@ -318,12 +318,18 @@ abstract class Component implements IAccessibility {
         return this._isselectable;
     }
 
-    attach(handler: { (event: EventArgs): void }): void {
-        this._handlers.push(handler);
+    attach(handler: { (e: EventArgs): void }, state?: WidgetState): void {
+        this._handlers.set(state, handler);
     }
 
-    raise(event: EventArgs) {
-        this._handlers.slice(0).forEach(h => h(event));
+    raise(event: EventArgs, state?: WidgetState) {
+        this._handlers.forEach((e,s)=>{
+            //if state can be found, raise, otherwise raise everything (for backwards compat)
+            if (state && s instanceof state.constructor)  {
+                console.log("raising", state, s)
+                e(event);
+            }
+        });
     }
 
     move(x: number, y: number): void {
@@ -402,6 +408,9 @@ class Window extends Component {
         SVG(window).on('keyup', (event)=>{
             this.keyEvent = event as KeyboardEvent
             this.state.onKeyup(this);
+        }, window);
+        SVG(window).on('selectionchange', (event)=>{
+            console.log(window.getSelection().toString())
         }, window);
         obj.mouseup((event: any) => {
             this.state.onRelease(this);

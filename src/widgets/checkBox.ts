@@ -6,7 +6,7 @@ import {Rect, Text, Box} from "../core/ui";
 import {Circle} from "../core/ui";
 
 
-class CButton extends Widget{
+class CheckBox extends Widget{
     private _circle: Circle;
     private _text: Text;
     private _fontSize: number;
@@ -14,9 +14,9 @@ class CButton extends Widget{
     private _text_y: number;
     private _text_x: number;
     private _radius: number;
-    private defaultText: string= "Circle Button";
+    private defaultText: string= "Check Box";
     private defaultFontSize: number = 12;
-    private defaultRadius: number = 40
+    private defaultRadius: number = 20
 
     constructor(parent:Window){
         super(parent);
@@ -37,8 +37,9 @@ class CButton extends Widget{
         this._group = (this.parent as Window).window.group();
         this._circle = this._group.circle(this._radius);
         this._text = this._group.text(this._input);
-        this._circle.stroke("black");
         this._circle.fill("#00FFCA");
+        this._circle.stroke("black");
+        this._circle.attr("stroke-width",10);
         // Set the outer svg element 
         this.outerSvg = this._group;
         // Add a transparent rect on top of text to prevent selection cursor
@@ -53,7 +54,7 @@ class CButton extends Widget{
         let box:Box = this._text.bbox();
         // in TS, the prepending with + performs a type conversion from string to number
         this._text_y = (+this._circle.y() + ((+this._circle.attr("r"))) - (box.height/2));
-        this._text_x = (+this._circle.x() + ((+this._circle.attr("r"))) - (box.width/2));
+        this._text_x = (+this._circle.x() + ((+this._circle.attr("r")*4)));
         if (this._text_y > 0){
             this._text.y(this._text_y);
         }
@@ -135,4 +136,4 @@ class CButton extends Widget{
     }
 }
 
-export {CButton}
+export {CheckBox}
