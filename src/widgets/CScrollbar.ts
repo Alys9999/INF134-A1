@@ -6,7 +6,7 @@ import {Rect, Text, Box} from "../core/ui";
 import {Circle} from "../core/ui";
 
 
-class CheckBox extends Widget{
+class CScrollbar extends Widget{
     private _circle: Circle;
     private _text: Text;
     private _fontSize: number;
@@ -14,10 +14,9 @@ class CheckBox extends Widget{
     private _text_y: number;
     private _text_x: number;
     private _radius: number;
-    private defaultText: string= "Check Box";
-    private defaultFontSize: number = 10;
-    private defaultRadius: number = 16;
-    private _isPressed: boolean = false;
+    private defaultText: string= "Circle Button";
+    private defaultFontSize: number = 12;
+    private defaultRadius: number = 40
 
     constructor(parent:Window){
         super(parent);
@@ -26,7 +25,7 @@ class CheckBox extends Widget{
         this._fontSize = this.defaultFontSize;
         this._radius = this.defaultRadius;
         // set Aria role
-        this.role = RoleType.button;
+        this.role = RoleType.scrollbar;
         //TODO:
         // set default state!
         this.setState(new IdleUpWidgetState());
@@ -38,16 +37,12 @@ class CheckBox extends Widget{
         this._group = (this.parent as Window).window.group();
         this._circle = this._group.circle(this._radius);
         this._text = this._group.text(this._input);
-        this._text.font('size', this._fontSize);
-        this._circle.fill("#00FFCA");
         this._circle.stroke("black");
-        this._circle.attr("stroke-width",5);
-        this.positionText()
+        this._circle.fill("#00FFCA");
         // Set the outer svg element 
         this.outerSvg = this._group;
         // Add a transparent rect on top of text to prevent selection cursor
         this._group.circle(this._radius).opacity(0).attr('id', 0);
-        
         // register objects that should receive event notifications.
         // for this widget, we want to know when the group or rect objects
         // receive events
@@ -58,7 +53,7 @@ class CheckBox extends Widget{
         let box:Box = this._text.bbox();
         // in TS, the prepending with + performs a type conversion from string to number
         this._text_y = (+this._circle.y() + ((+this._circle.attr("r"))) - (box.height/2));
-        this._text_x = (+this._circle.x() + ((+this._circle.attr("r")*2.5)));
+        this._text_x = (+this._circle.x() + ((+this._circle.attr("r"))) - (box.width/2));
         if (this._text_y > 0){
             this._text.y(this._text_y);
         }
@@ -69,12 +64,22 @@ class CheckBox extends Widget{
 
     override update(): void {
         if(this._text != null)
+            this._text.font('size', this._fontSize);
             this._text.text(this._input);
+            this.positionText()
+
         if(this._circle != null)
             this._circle.fill(this.backcolor);
+        if(this._radius != null)
+            this._circle.radius(this._radius);
+        
         super.update();
     }
 
+    set fontSize(size:number){
+        this._fontSize= size;
+        this.update();
+    }
 
     set setInput(text:string){
         this._input = text;
@@ -85,7 +90,15 @@ class CheckBox extends Widget{
         return this._input;
     }
 
-    //can i do it like a ispressed getter method to notify the consuming code?
+    set setRadius(r:number){
+        this._radius = r;
+        this.update();
+    }
+
+    get getRadiu(){
+        return this._radius;
+    }
+
     onClick(callback:{(event?:any):void}):void{
        this.attach(callback)
     }
@@ -94,40 +107,25 @@ class CheckBox extends Widget{
     //TODO: give the states something to do! Use these methods to control the visual appearance of your
     //widget
     idleupState(): void {
-        if (this._isPressed===false){
-            this.backcolor="#00FFCA"
-        }else{
-            this.backcolor="#525252";
-        }
+        this.backcolor="#00FFCA";
     }
     idledownState(): void {
     }
     pressedState(): void {
         this.backcolor="#088395";
     }
-
-    //why the color dont update?
-    //the roletype cant be none
     pressReleaseState(): void {
-        if (this._isPressed===false){
-            this._isPressed=true;
-            this.backcolor="#525252"
-        }else{
-            this._isPressed=false;
-            this.backcolor="#00FFCA";
-        }
+        this.backcolor="#00FFCA";
+        this.raise(new EventArgs(this));
     }
-
     hoverState(): void {
+        this.backcolor="#05BFDB";
     }
     hoverPressedState(): void {
+        this.backcolor="#088395";
     }
     pressedoutState(): void {
-        if (this._isPressed===false){
-            this.backcolor="#00FFCA"
-        }else{
-            this.backcolor="#525252";
-        }
+        this.backcolor="#00FFCA";
     }
     moveState(): void {
         
@@ -137,4 +135,4 @@ class CheckBox extends Widget{
     }
 }
 
-export {CheckBox}
+export {CScrollbar}
