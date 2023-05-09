@@ -5,9 +5,11 @@ import { Template } from "./widgets/template";
 import { CButton } from "./widgets/cButton";
 import { CheckBox } from "./widgets/checkBox";
 import { CRadio } from "./widgets/cradio";
+import { CScrollbar } from "./widgets/CScrollbar";
 
 
 let w = new Window(window.innerHeight-10,'100%');
+
 
 let lbl1= new Heading(w);
 lbl1.text = "Button Demo";
@@ -55,3 +57,7 @@ crad.move(300,100);
 crad.onClick((event:any)=>{
 
 })
+
+let scrollbar = new CScrollbar(w);
+scrollbar.tabindex=7;
+scrollbar.move(400,100);

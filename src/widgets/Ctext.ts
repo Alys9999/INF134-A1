@@ -6,23 +6,27 @@ import {Rect, Text, Box} from "../core/ui";
 import {Circle} from "../core/ui";
 
 
-class CScrollbar extends Widget{
+
+class Ctext extends Widget{
     private _circle: Circle;
-    private _bar: Rect;
-    private _h: number = 400;
-    private _radius: number = 30;
-    private isDragging = false;
-    private x: number = 0;
-    private y: number = 0;
-    private startDragX = 0;
-    private startDragY = 0;
+    private _text: Text;
+    private _fontSize: number;
+    private _input: string;
+    private _text_y: number;
+    private _text_x: number;
+    private _radius: number;
+    private defaultText: string= "Circle Button";
+    private defaultFontSize: number = 12;
+    private defaultRadius: number = 40
 
     constructor(parent:Window){
         super(parent);
         // set defaults
-        this.isDraggable=true;
+        this._input = this.defaultText;
+        this._fontSize = this.defaultFontSize;
+        this._radius = this.defaultRadius;
         // set Aria role
-        this.role = RoleType.scrollbar;
+        this.role = RoleType.button;
         //TODO:
         // set default state!
         this.setState(new IdleUpWidgetState());
@@ -32,11 +36,10 @@ class CScrollbar extends Widget{
 
     render(): void {
         this._group = (this.parent as Window).window.group();
-        this._bar = this._group.rect(30,this._h);
         this._circle = this._group.circle(this._radius);
+        this._text = new Text()
         this._circle.stroke("black");
         this._circle.fill("#00FFCA");
-        this._bar.fill("#dad7cd")
         // Set the outer svg element 
         this.outerSvg = this._group;
         // Add a transparent rect on top of text to prevent selection cursor
@@ -47,30 +50,46 @@ class CScrollbar extends Widget{
         this.registerEvent(this.outerSvg);
     }
 
-    private initMove(clientX:number, clientY:number){
-        this.isDragging = true;
-        this.x = +this._circle.x();
-        this.y = +this._circle.y();
-        this.startDragX = clientX;
-        this.startDragY = clientY;
+    private positionText(){
+        let box:Box = this._text.bbox();
+        // in TS, the prepending with + performs a type conversion from string to number
+        this._text_y = (+this._circle.y() + ((+this._circle.attr("r"))) - (box.height/2));
+        this._text_x = (+this._circle.x() + ((+this._circle.attr("r"))) - (box.width/2));
+        if (this._text_y > 0){
+            this._text.y(this._text_y);
+        }
+        if (this._text_x > 0){
+            this._text.x(this._text_x)
+        }
     }
-    
-    private moveObj(event: MouseEvent){
-        window.requestAnimationFrame(() => {
-            const deltaX = event.clientX - this.startDragX; 
-            const deltaY = event.clientY - this.startDragY; 
-            this.move(+this._circle.x + deltaX, +this._circle.y + deltaY);
-        });
-    }
-
 
     override update(): void {
+        if(this._text != null)
+            this._text.font('size', this._fontSize);
+            this._text.text(this._input);
+            this.positionText()
+
         if(this._circle != null)
             this._circle.fill(this.backcolor);
+        if(this._radius != null)
+            this._circle.radius(this._radius);
         
         super.update();
     }
 
+    set fontSize(size:number){
+        this._fontSize= size;
+        this.update();
+    }
+
+    set setInput(text:string){
+        this._input = text;
+        this.update();
+    }
+
+    get getInput(){
+        return this._input;
+    }
 
     set setRadius(r:number){
         this._radius = r;
@@ -82,7 +101,7 @@ class CScrollbar extends Widget{
     }
 
     onClick(callback:{(event?:any):void}):void{
-       this.attach(callback)
+       this.attach(callback, new PressedWidgetState())
     }
 
 
@@ -95,17 +114,12 @@ class CScrollbar extends Widget{
     }
     pressedState(): void {
         this.backcolor="#088395";
-        if (this.rawEvent != null){
-            let e = this.rawEvent as MouseEvent;
-            this.initMove(e.clientX, e.clientY);
-        }
     }
     pressReleaseState(): void {
         this.backcolor="#00FFCA";
-        this.raise(new EventArgs(this));
+        this.raise(new EventArgs(this), new PressedWidgetState());
     }
     hoverState(): void {
-        this.isDragging = false;
         this.backcolor="#05BFDB";
     }
     hoverPressedState(): void {
@@ -115,12 +129,6 @@ class CScrollbar extends Widget{
         this.backcolor="#00FFCA";
     }
     moveState(): void {
-        if (this.isDragging){
-            if (this.rawEvent != null){
-                let e = this.rawEvent as MouseEvent;
-                this.moveObj(e);
-            }
-        }
         
     }
     keyupState(): void {
@@ -128,4 +136,4 @@ class CScrollbar extends Widget{
     }
 }
 
-export {CScrollbar}
+export {Ctext}
