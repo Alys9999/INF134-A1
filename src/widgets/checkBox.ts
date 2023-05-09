@@ -85,6 +85,10 @@ class CheckBox extends Widget{
         return this._input;
     }
 
+    get getIsPressed(){
+        return this._isPressed;
+    }
+
     //can i do it like a ispressed getter method to notify the consuming code?
     onClick(callback:{(event?:any):void}):void{
        this.attach(callback)

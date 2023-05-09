@@ -100,7 +100,7 @@ class CButton extends Widget{
     }
 
     onClick(callback:{(event?:any):void}):void{
-       this.attach(callback)
+       this.attach(callback, new PressedWidgetState())
     }
 
 
@@ -116,7 +116,7 @@ class CButton extends Widget{
     }
     pressReleaseState(): void {
         this.backcolor="#00FFCA";
-        this.raise(new EventArgs(this));
+        this.raise(new EventArgs(this), new PressedWidgetState());
     }
     hoverState(): void {
         this.backcolor="#05BFDB";

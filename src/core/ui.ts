@@ -326,7 +326,10 @@ abstract class Component implements IAccessibility {
         this._handlers.forEach((e,s)=>{
             //if state can be found, raise, otherwise raise everything (for backwards compat)
             if (state && s instanceof state.constructor)  {
-                console.log("raising", state, s)
+                e(event);
+            }
+            //if s is undefined, assume only one event attached, so raise
+            if (s == undefined){
                 e(event);
             }
         });

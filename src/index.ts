@@ -28,4 +28,11 @@ btn2.onClick((event:any)=>{
 let checkB = new CheckBox(w);
 checkB.tabindex=4;
 checkB.move(200,100);
+checkB.onClick((event:any)=>{
+    if (checkB.getIsPressed){
+        lbl1.text="checked";
+    }else{
+        lbl1.text="Unchecked";
+    }
+})
 
