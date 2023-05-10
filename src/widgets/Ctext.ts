@@ -4,6 +4,7 @@ import {Window, Widget, RoleType} from "../core/ui";
 import {Rect, Text, Box} from "../core/ui";
 // importing code from SVG.js library
 import {Circle} from "../core/ui";
+import {SVG} from "../core/ui";
 
 
 
@@ -15,9 +16,9 @@ class Ctext extends Widget{
     private _text_y: number;
     private _text_x: number;
     private _radius: number;
-    private defaultText: string= "Circle Button";
+    private defaultText: string= "Write Here";
     private defaultFontSize: number = 12;
-    private defaultRadius: number = 40
+    private defaultRadius: number = 200
 
     constructor(parent:Window){
         super(parent);
@@ -26,7 +27,7 @@ class Ctext extends Widget{
         this._fontSize = this.defaultFontSize;
         this._radius = this.defaultRadius;
         // set Aria role
-        this.role = RoleType.button;
+        this.role = RoleType.window;
         //TODO:
         // set default state!
         this.setState(new IdleUpWidgetState());
@@ -37,13 +38,21 @@ class Ctext extends Widget{
     render(): void {
         this._group = (this.parent as Window).window.group();
         this._circle = this._group.circle(this._radius);
-        this._text = new Text()
+        this._text = this._group.text(this._input);
+        this.positionText();
         this._circle.stroke("black");
-        this._circle.fill("#00FFCA");
+        this._circle.fill("white");
+
+
+
+
+
+
+
         // Set the outer svg element 
         this.outerSvg = this._group;
         // Add a transparent rect on top of text to prevent selection cursor
-        this._group.circle(this._radius).opacity(0).attr('id', 0);
+        
         // register objects that should receive event notifications.
         // for this widget, we want to know when the group or rect objects
         // receive events
@@ -108,25 +117,22 @@ class Ctext extends Widget{
     //TODO: give the states something to do! Use these methods to control the visual appearance of your
     //widget
     idleupState(): void {
-        this.backcolor="#00FFCA";
     }
     idledownState(): void {
     }
     pressedState(): void {
-        this.backcolor="#088395";
     }
     pressReleaseState(): void {
-        this.backcolor="#00FFCA";
+        
         this.raise(new EventArgs(this), new PressedWidgetState());
     }
     hoverState(): void {
-        this.backcolor="#05BFDB";
     }
     hoverPressedState(): void {
-        this.backcolor="#088395";
+
     }
     pressedoutState(): void {
-        this.backcolor="#00FFCA";
+
     }
     moveState(): void {
         

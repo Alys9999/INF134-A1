@@ -18,6 +18,7 @@ class CRadio extends Widget{
         super(parent);
         // set defaults
         this._namelist=namelist;
+        this._pressednum = 0;
         // set Aria role
         this.role = RoleType.group;
         //TODO:
@@ -127,6 +128,7 @@ class CRadio extends Widget{
     //why the color dont update?
     //the roletype cant be none
     pressReleaseState(): void {
+        this.raise(new EventArgs(this), new PressedWidgetState());
         // if (this._isPressed===false){
         //     this._isPressed=true;
         //     this.backcolor="#525252"
@@ -139,6 +141,7 @@ class CRadio extends Widget{
     }
 
     hoverState(): void {
+        this._rmap.get(this._namelist[this._pressednum]).get(0).fill("#525252");
     }
     hoverPressedState(): void {
     }
