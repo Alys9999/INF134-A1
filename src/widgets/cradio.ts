@@ -1,3 +1,4 @@
+
 // importing local code, code we have written
 import {EventArgs, G, IdleUpWidgetState, PressedWidgetState } from "../core/ui";
 import {Window, Widget, RoleType} from "../core/ui";
@@ -128,6 +129,7 @@ class CRadio extends Widget{
     //why the color dont update?
     //the roletype cant be none
     pressReleaseState(): void {
+        this.rawEvent.
         this.raise(new EventArgs(this), new PressedWidgetState());
         // if (this._isPressed===false){
         //     this._isPressed=true;
