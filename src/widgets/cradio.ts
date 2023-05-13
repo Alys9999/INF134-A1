@@ -75,9 +75,9 @@ class CRadio extends Widget{
     // }
 
     setname(i: number, name:string): void{
-        let item = this._rmap.get(this._namelist[i])//.get(1);
-        //item.;
-        console.log(item);
+        let item = this._rmap.get(this._namelist[i]);
+        let textitem = (item.get(1) as Text);
+        textitem.text(name);
         this._namelist[i]=name;
         this._rmap.set(this._namelist[i],item);
     }
