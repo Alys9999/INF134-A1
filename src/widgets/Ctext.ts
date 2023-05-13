@@ -1,30 +1,28 @@
 // importing local code, code we have written
-import {EventArgs, IdleUpWidgetState, PressedWidgetState } from "../core/ui";
+import {EventArgs, IdleUpWidgetState, PressedWidgetState, KeypressWidgetState } from "../core/ui";
 import {Window, Widget, RoleType} from "../core/ui";
 import {Rect, Text, Box} from "../core/ui";
 // importing code from SVG.js library
 import {Circle} from "../core/ui";
-import {SVG} from "../core/ui";
 
 
 
 class Ctext extends Widget{
     private _circle: Circle;
     private _text: Text;
-    private _fontSize: number;
+    private _fontSize: number = 12;
     private _input: string;
     private _text_y: number;
     private _text_x: number;
     private _radius: number;
+    private _focusing: boolean = false;
     private defaultText: string= "Write Here";
-    private defaultFontSize: number = 12;
     private defaultRadius: number = 200
 
     constructor(parent:Window){
         super(parent);
         // set defaults
         this._input = this.defaultText;
-        this._fontSize = this.defaultFontSize;
         this._radius = this.defaultRadius;
         // set Aria role
         this.role = RoleType.window;
@@ -42,13 +40,6 @@ class Ctext extends Widget{
         this.positionText();
         this._circle.stroke("black");
         this._circle.fill("white");
-
-
-
-
-
-
-
         // Set the outer svg element 
         this.outerSvg = this._group;
         // Add a transparent rect on top of text to prevent selection cursor
@@ -77,13 +68,16 @@ class Ctext extends Widget{
             this._text.font('size', this._fontSize);
             this._text.text(this._input);
             this.positionText()
-
         if(this._circle != null)
             this._circle.fill(this.backcolor);
         if(this._radius != null)
             this._circle.radius(this._radius);
         
         super.update();
+    }
+
+    set defaulttext(dt: string){
+        this.defaultText=dt;    
     }
 
     set fontSize(size:number){
@@ -110,7 +104,7 @@ class Ctext extends Widget{
     }
 
     onClick(callback:{(event?:any):void}):void{
-       this.attach(callback, new PressedWidgetState())
+       this.attach(callback, new KeypressWidgetState())
     }
 
 
@@ -119,12 +113,20 @@ class Ctext extends Widget{
     idleupState(): void {
     }
     idledownState(): void {
+        if(this._focusing){
+            this._focusing=false;
+            this._input=this._text.text().slice(0,-1);
+            this.update();
+        }
     }
     pressedState(): void {
     }
     pressReleaseState(): void {
-        
-        this.raise(new EventArgs(this), new PressedWidgetState());
+        if (!this._focusing){
+            this._focusing=true;
+            this._input= this._text.text()+"|";
+            this.update();
+        }
     }
     hoverState(): void {
     }
@@ -137,8 +139,13 @@ class Ctext extends Widget{
     moveState(): void {
         
     }
-    keyupState(): void {
-        
+    keyupState(keyEvent?: KeyboardEvent): void {
+        if (this._focusing){
+            this._input=this._text.text() + keyEvent.key;
+            this.update();
+            this.raise(new EventArgs(this), new KeypressWidgetState())
+        }
+
     }
 }
 

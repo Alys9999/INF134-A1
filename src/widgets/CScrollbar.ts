@@ -62,7 +62,13 @@ class CScrollbar extends Widget{
         this._thumb.setbary=(+this._bar.y());
         this._thumb.move(+this._bar.x(), +this._bar.y());
         this._scrollup.move(+this._bar.x(), +this._bar.y()-30);
+        this._scrollup.onClick((event:any)=>{
+                this._thumb.scrollup();
+            })
         this._scrolldown.move(+this._bar.x(), +this._bar.y()+this._h);
+        this._scrolldown.onClick((event:any)=>{
+            this._thumb.scrolldown();
+        })
         super.update();
     }
     onMove(callback:{(event?:any):void}):void{
