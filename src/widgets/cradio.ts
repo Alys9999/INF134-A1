@@ -35,7 +35,7 @@ class CRadio extends Widget{
             let currentCircle=currentgroup.circle(this._radius);
             let currenttext = currentgroup.text(this._namelist[i]);
             currenttext.font('size', this._fontSize);
-            currentCircle.fill("#00FFCA");
+            currentCircle.fill("white");
             currentCircle.stroke("black");
             currentCircle.attr("stroke-width",5);
             currentCircle.y(+currentCircle.y()+25*i)
@@ -74,6 +74,14 @@ class CRadio extends Widget{
     //     }
     // }
 
+    setname(i: number, name:string): void{
+        let item = this._rmap.get(this._namelist[i])//.get(1);
+        //item.;
+        console.log(item);
+        this._namelist[i]=name;
+        this._rmap.set(this._namelist[i],item);
+    }
+
     override update(): void {
         // if(this._text != null)
         //     this._text.text(this._input);
@@ -105,14 +113,12 @@ class CRadio extends Widget{
     //TODO: give the states something to do! Use these methods to control the visual appearance of your
     //widget
     idleupState(): void {
-        // if(this._pressednum!=null){
-        //     this._rmap.get(this._namelist[this._pressednum]).get(0).fill("#525252");
-        //     let unpressedlist = [...this._namelist];
-        //     delete unpressedlist[this._pressednum];
-        //     for (let item of unpressedlist){
-        //         this._rmap.get(item).get(0).fill("#00FFCA");
-        //     }
-        // }
+        if(this._pressednum!=null){
+            for (let name of this._namelist){
+                this._rmap.get(name).get(0).fill("white");
+            }
+            this._rmap.get(this._namelist[this._pressednum]).get(0).fill("#525252");
+        }
         // if (this._isPressed===false){
         //     this.backcolor="#00FFCA"
         // }else{
@@ -122,8 +128,9 @@ class CRadio extends Widget{
     idledownState(): void {
     }
     pressedState(): void {
-        
-        this.backcolor="#088395";
+        if (this._pressednum!=null){
+            this._rmap.get(this._namelist[this._pressednum]).get(0).fill("#088395");
+        }
     }
 
     //why the color dont update?
@@ -132,7 +139,12 @@ class CRadio extends Widget{
         let x = (this.rawEvent as MouseEvent).target;
         if (x!=undefined){
             let id = (SVG(x) as Circle).attr("id");
-            console.log(id);
+            this._pressednum=id;
+            for (let name of this._namelist){
+                this._rmap.get(name).get(0).fill("white");
+            }
+            this._rmap.get(this._namelist[this._pressednum]).get(0).fill("#525252");
+
         }
         
         this.raise(new EventArgs(this), new PressedWidgetState());
@@ -148,16 +160,16 @@ class CRadio extends Widget{
     }
 
     hoverState(): void {
-        this._rmap.get(this._namelist[this._pressednum]).get(0).fill("#525252");
     }
     hoverPressedState(): void {
     }
     pressedoutState(): void {
-        // if (this._isPressed===false){
-        //     this.backcolor="#00FFCA"
-        // }else{
-        //     this.backcolor="#525252";
-        // }
+        if(this._pressednum!=null){
+            for (let name of this._namelist){
+                this._rmap.get(name).get(0).fill("white");
+            }
+            this._rmap.get(this._namelist[this._pressednum]).get(0).fill("#525252");
+        }
     }
     moveState(): void {
         

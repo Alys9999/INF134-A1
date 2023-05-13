@@ -3,6 +3,8 @@ import {DragWindowState, EventArgs, IdleUpWidgetState, PressedWidgetState } from
 import {Window, Widget, RoleType} from "../core/ui";
 import {Rect} from "../core/ui";
 import {CScrollthumb} from "./CScrollthumb";
+import { CScrolldown } from "./scrolldown";
+import {CScrollup} from "./scrollup";
 // importing code from SVG.js library
 
 
@@ -10,11 +12,14 @@ class CScrollbar extends Widget{
     private _bar: Rect;
     private _h: number = 400;
     private _thumb: CScrollthumb;
+    private _scrollup: CScrollup;
+    private _scrolldown: CScrolldown;
 
     constructor(parent:Window){
         super(parent);
         // set defaults
-        
+        this._scrollup = new CScrollup(parent as Window);
+        this._scrolldown = new CScrolldown(parent as Window);
         // set Aria role
         this.role = RoleType.scrollbar;
         //TODO:
@@ -29,6 +34,7 @@ class CScrollbar extends Widget{
         this._group = (this.parent as Window).window.group();
         this._bar = this._group.rect(30,this._h);
         this._bar.fill("#dad7cd")
+
       
         // Set the outer svg element 
         this.outerSvg = this._group;
@@ -45,6 +51,14 @@ class CScrollbar extends Widget{
             this.raise(new EventArgs(this), new DragWindowState());
         })
         this._thumb.move(+this._bar.x(), +this._bar.y());
+        this._scrollup.move(+this._bar.x, +this._bar.y);
+        this._scrolldown.move(+this._bar.x, +this._bar.y+this._h-40);
+        this._scrollup.onClick((event:any)=>{
+            this._thumb.move(+this._bar.x(), +this._bar.y()-20)
+        })
+        this._scrolldown.onClick((event:any)=>{
+            this._thumb.move(+this._bar.x(), +this._bar.y()+20)
+        })
         super.update();
     }
     onMove(callback:{(event?:any):void}):void{

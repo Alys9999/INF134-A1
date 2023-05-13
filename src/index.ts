@@ -34,11 +34,11 @@ let lbl2= new Heading(w);
 lbl2.text = "CheckBox Demo";
 lbl2.tabindex = 3;
 lbl2.fontSize = 16;
-lbl2.move(200,50);
+lbl2.move(300,50);
 
 let checkB = new CheckBox(w);
 checkB.tabindex=4;
-checkB.move(200,100);
+checkB.move(300,100);
 checkB.onClick((event:any)=>{
     if (checkB.getIsPressed){
         lbl2.text="checked";
@@ -51,25 +51,26 @@ let lbl3= new Heading(w);
 lbl3.text = "Radio Demo";
 lbl3.tabindex = 5;
 lbl3.fontSize = 16;
-lbl3.move(300,50);
+lbl3.move(500,50);
 
 let crad = new CRadio(w,new Array("1","2","3"));
 crad.tabindex=6;
-crad.move(300,100);
+crad.move(500,100);
+crad.setname(0, "alyssa");
 crad.onClick((event:any)=>{
-    lbl3.text=event.getPressednum +" is clicked";
+    lbl3.text="the item of index "+crad.getPressednum +" is clicked";
 })
 
 let bartext = new Heading(w);
 bartext.tabindex=10;
-bartext.move(400,50);
+bartext.move(700,50);
 bartext.text="bar thumb position";
 
 
 //the click of scrollthumb does not trigger the onCLick of scollbar
 let scrollbar = new CScrollbar(w);
 scrollbar.tabindex=7;
-scrollbar.move(400,100);
+scrollbar.move(700,100);
 scrollbar.onClick((event:any)=>{
     bartext.text=String(scrollbar.getthumbpos);
 })
@@ -81,11 +82,11 @@ scrollbar.onMove((event:any)=>{
 let lbl4 = new Heading(w);
 lbl4.text = "Ctext";
 lbl4.tabindex = 8;
-lbl4.move(800,150);
+lbl4.move(900,150);
 
 let ctext = new Ctext(w);
 ctext.tabindex = 9;
-ctext.move(800,100);
+ctext.move(900,100);
 ctext.onClick((event:any)=>{
     console.log(event);
     ctext.setInput = ctext.getInput+"|";
