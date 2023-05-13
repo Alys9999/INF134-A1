@@ -6,6 +6,7 @@ import { CButton } from "./widgets/cButton";
 import { CheckBox } from "./widgets/checkBox";
 import { CRadio } from "./widgets/cradio";
 import { CScrollbar } from "./widgets/CScrollbar";
+import { CScrollthumb } from "./widgets/CScrollthumb";
 import { Ctext } from "./widgets/Ctext";
 
 
@@ -59,9 +60,23 @@ crad.onClick((event:any)=>{
     lbl3.text=event.getPressednum +" is clicked";
 })
 
+let bartext = new Heading(w);
+bartext.tabindex=10;
+bartext.move(400,50);
+bartext.text="bar thumb position";
+
+
+//the click of scrollthumb does not trigger the onCLick of scollbar
 let scrollbar = new CScrollbar(w);
 scrollbar.tabindex=7;
 scrollbar.move(400,100);
+scrollbar.onClick((event:any)=>{
+    bartext.text=String(scrollbar.getthumbpos);
+})
+scrollbar.onMove((event:any)=>{
+    bartext.text=String(scrollbar.getthumbpos);
+})
+
 
 let lbl4 = new Heading(w);
 lbl4.text = "Ctext";

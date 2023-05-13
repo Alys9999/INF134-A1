@@ -1,7 +1,6 @@
 // importing local code, code we have written
-import {EventArgs, IdleUpWidgetState, PressedWidgetState } from "../core/ui";
+import {DragWindowState, EventArgs, IdleUpWidgetState, PressedWidgetState } from "../core/ui";
 import {Window, Widget, RoleType} from "../core/ui";
-import {Rect, Text, Box} from "../core/ui";
 // importing code from SVG.js library
 import {Circle} from "../core/ui";
 
@@ -14,11 +13,15 @@ class CScrollthumb extends Widget{
     private y: number = 0;
     private startDragX = 0;
     private startDragY = 0;
+    private _bary: number;
+    private _h:number;
 
-    constructor(parent:Window){
+    constructor(parent:Window, bary: number, h: number){
         super(parent);
         // set defaults
         this.isDraggable=true;
+        this._bary=bary;
+        this._h=h;
         // set Aria role
         this.role = RoleType.scrollbar;
         //TODO:
@@ -51,9 +54,11 @@ class CScrollthumb extends Widget{
     
     private moveObj(event: MouseEvent){
         window.requestAnimationFrame(() => {
-            const deltaX = event.clientX - this.startDragX; 
+            //const deltaX = event.clientX - this.startDragX; 
             const deltaY = event.clientY - this.startDragY; 
-            this.move(+this.x + deltaX, +this.y + deltaY);
+            if (this._bary<+this.y+deltaY && +this.y+deltaY<=this._bary+this._h-2*this._circle.attr("r")){
+                this.move(+this.x, +this.y + deltaY);
+            }
         });
     }
 
@@ -63,6 +68,10 @@ class CScrollthumb extends Widget{
             this._circle.fill(this.backcolor);
         
         super.update();
+    }
+
+    get getpos(){
+        return [+this._circle.x(), +this._circle.y()];
     }
 
 
@@ -75,9 +84,20 @@ class CScrollthumb extends Widget{
         return this._radius;
     }
 
-    onClick(callback:{(event?:any):void}):void{
-       this.attach(callback)
+    jump(e: MouseEvent){
+        if (+this._bary<e.clientY && e.clientY<+this._bary+this._h){
+            console.log(this.x);
+            this.move(+this._circle.x(), e.clientY);
+        }
     }
+
+    onClick(callback:{(event?:any):void}):void{
+       this.attach(callback, new PressedWidgetState())
+    }
+
+    onMove(callback:{(event?:any):void}):void{
+        this.attach(callback, new DragWindowState())
+     }
 
 
     //TODO: give the states something to do! Use these methods to control the visual appearance of your
@@ -96,7 +116,7 @@ class CScrollthumb extends Widget{
     }
     pressReleaseState(): void {
         this.backcolor="#00FFCA";
-        this.raise(new EventArgs(this));
+        this.raise(new EventArgs(this), new PressedWidgetState());
     }
     hoverState(): void {
         this.isDragging = false;
@@ -113,8 +133,10 @@ class CScrollthumb extends Widget{
             if (this.rawEvent != null){
                 let e = this.rawEvent as MouseEvent;
                 this.moveObj(e);
+                this.raise(new EventArgs(this), new DragWindowState());
             }
         }
+        
         
     }
     keyupState(): void {

@@ -1,6 +1,6 @@
 
 // importing local code, code we have written
-import {EventArgs, G, IdleUpWidgetState, PressedWidgetState } from "../core/ui";
+import {EventArgs, G, IdleUpWidgetState, PressedWidgetState, SVG } from "../core/ui";
 import {Window, Widget, RoleType} from "../core/ui";
 import {Rect, Text, Box} from "../core/ui";
 // importing code from SVG.js library
@@ -13,13 +13,12 @@ class CRadio extends Widget{
     private _radius: number = 16;
     private _rmap: Map<string,G> = new Map();
     private _namelist:Array<string>;
-    private _pressednum: number;
+    private _pressednum: number = null;
 
     constructor(parent:Window, namelist:Array<string>){
         super(parent);
         // set defaults
         this._namelist=namelist;
-        this._pressednum = 0;
         // set Aria role
         this.role = RoleType.group;
         //TODO:
@@ -43,7 +42,8 @@ class CRadio extends Widget{
             let box:Box = currenttext.bbox()
             currenttext.y(+currentCircle.y()+(+currentCircle.attr("r"))-(box.height/2))
             currenttext.x(+currentCircle.x()+(+currentCircle.attr("r"))*2.5)
-            this.registerEvent(currentgroup)
+            currentCircle.attr("id", i);
+            this.registerEvent(currentgroup);
             this._rmap.set(this._namelist[i], currentgroup);
         }
         
@@ -105,14 +105,14 @@ class CRadio extends Widget{
     //TODO: give the states something to do! Use these methods to control the visual appearance of your
     //widget
     idleupState(): void {
-        if(this._pressednum!=null){
-            this._rmap.get(this._namelist[this._pressednum]).get(0).fill("#525252");
-            let unpressedlist = [...this._namelist];
-            delete unpressedlist[this._pressednum];
-            for (let item of unpressedlist){
-                this._rmap.get(item).get(0).fill("#00FFCA");
-            }
-        }
+        // if(this._pressednum!=null){
+        //     this._rmap.get(this._namelist[this._pressednum]).get(0).fill("#525252");
+        //     let unpressedlist = [...this._namelist];
+        //     delete unpressedlist[this._pressednum];
+        //     for (let item of unpressedlist){
+        //         this._rmap.get(item).get(0).fill("#00FFCA");
+        //     }
+        // }
         // if (this._isPressed===false){
         //     this.backcolor="#00FFCA"
         // }else{
@@ -129,7 +129,12 @@ class CRadio extends Widget{
     //why the color dont update?
     //the roletype cant be none
     pressReleaseState(): void {
-        this.rawEvent.
+        let x = (this.rawEvent as MouseEvent).target;
+        if (x!=undefined){
+            let id = (SVG(x) as Circle).attr("id");
+            console.log(id);
+        }
+        
         this.raise(new EventArgs(this), new PressedWidgetState());
         // if (this._isPressed===false){
         //     this._isPressed=true;
