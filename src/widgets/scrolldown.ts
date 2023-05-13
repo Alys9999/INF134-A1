@@ -8,7 +8,7 @@ import {Circle} from "../core/ui";
 
 class CScrolldown extends Widget{
     private _circle: Circle;
-    private _radius: number = 40;
+    private _radius: number = 30;
 
     constructor(parent:Window){
         super(parent);

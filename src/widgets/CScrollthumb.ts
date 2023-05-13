@@ -16,11 +16,10 @@ class CScrollthumb extends Widget{
     private _bary: number;
     private _h:number;
 
-    constructor(parent:Window, bary: number, h: number){
+    constructor(parent:Window, h: number){
         super(parent);
         // set defaults
         this.isDraggable=true;
-        this._bary=bary;
         this._h=h;
         // set Aria role
         this.role = RoleType.scrollbar;
@@ -68,6 +67,10 @@ class CScrollthumb extends Widget{
             this._circle.fill(this.backcolor);
         
         super.update();
+    }
+
+    set setbary(bary: number){
+        this._bary=bary;
     }
 
     get getpos(){

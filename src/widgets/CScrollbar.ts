@@ -27,6 +27,19 @@ class CScrollbar extends Widget{
         this.setState(new IdleUpWidgetState());
         // render widget
         this.render();
+        this._thumb = new CScrollthumb(this.parent as Window, this._h);
+        this._thumb.onMove((event:any)=>{
+            this.raise(new EventArgs(this), new DragWindowState());
+        })
+        
+        // 
+        // this._scrolldown.move(+this._bar.x, +this._bar.y+this._h-40);
+        // this._scrollup.onClick((event:any)=>{
+        //     this._thumb.move(+this._bar.x(), +this._bar.y()-20)
+        // })
+        // this._scrolldown.onClick((event:any)=>{
+        //     this._thumb.move(+this._bar.x(), +this._bar.y()+20)
+        // })
         
     }
 
@@ -46,19 +59,10 @@ class CScrollbar extends Widget{
 
 
     override update(): void {
-        this._thumb = new CScrollthumb(this.parent as Window, +this._bar.y(), this._h);
-        this._thumb.onMove((event:any)=>{
-            this.raise(new EventArgs(this), new DragWindowState());
-        })
+        this._thumb.setbary=(+this._bar.y());
         this._thumb.move(+this._bar.x(), +this._bar.y());
-        this._scrollup.move(+this._bar.x, +this._bar.y);
-        this._scrolldown.move(+this._bar.x, +this._bar.y+this._h-40);
-        this._scrollup.onClick((event:any)=>{
-            this._thumb.move(+this._bar.x(), +this._bar.y()-20)
-        })
-        this._scrolldown.onClick((event:any)=>{
-            this._thumb.move(+this._bar.x(), +this._bar.y()+20)
-        })
+        this._scrollup.move(+this._bar.x(), +this._bar.y()-30);
+        this._scrolldown.move(+this._bar.x(), +this._bar.y()+this._h);
         super.update();
     }
     onMove(callback:{(event?:any):void}):void{
