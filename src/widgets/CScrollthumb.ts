@@ -61,6 +61,25 @@ class CScrollthumb extends Widget{
         });
     }
 
+    scrollup(): void{
+        if (this._bary<+this._circle.y()-20){
+            this.move(+this._circle.x(), +this._circle.y() - 20);
+        }
+        else{
+            this.move(+this._circle.x(), this._bary);
+        }
+        this.raise(new EventArgs(this), new DragWindowState());
+    }
+
+    scrolldown(): void{
+        if (+this._circle.y()+20<+this._bary+this._h-2*this._circle.attr("r")){
+            this.move(+this._circle.x(), +this._circle.y() + 20);
+        }else{
+            this.move(+this._circle.x(), +this._bary+this._h-2*this._circle.attr("r"));
+        }
+        this.raise(new EventArgs(this), new DragWindowState());
+    }
+
 
     override update(): void {
         if(this._circle != null)
@@ -101,6 +120,8 @@ class CScrollthumb extends Widget{
     onMove(callback:{(event?:any):void}):void{
         this.attach(callback, new DragWindowState())
      }
+
+
 
 
     //TODO: give the states something to do! Use these methods to control the visual appearance of your

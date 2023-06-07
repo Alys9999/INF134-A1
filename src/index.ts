@@ -82,12 +82,11 @@ scrollbar.onMove((event:any)=>{
 let lbl4 = new Heading(w);
 lbl4.text = "Ctext";
 lbl4.tabindex = 8;
-lbl4.move(900,150);
+lbl4.move(900, 500);
 
 let ctext = new Ctext(w);
 ctext.tabindex = 9;
 ctext.move(900,100);
 ctext.onClick((event:any)=>{
-    console.log(event);
-    ctext.setInput = ctext.getInput+"|";
+    lbl4.text="typing: " +ctext.getInput;
 });

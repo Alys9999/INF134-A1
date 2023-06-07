@@ -561,6 +561,6 @@ abstract class Widget extends Component {
 
 // local
 export { Window, Widget, Component, IAccessibility, RoleType, EventArgs }
-export { IdleUpWidgetState, IdleDownWidgetState, HoverWidgetState, HoverPressedWidgetState, PressedWidgetState, PressedOutWidgetState, DragWindowState };
+export { IdleUpWidgetState, IdleDownWidgetState, HoverWidgetState, HoverPressedWidgetState, PressedWidgetState, PressedOutWidgetState, DragWindowState, KeypressWidgetState };
 // from svg.js
 export { SVG, Svg, G, Rect, Container, Text, Box, Circle, Number };
