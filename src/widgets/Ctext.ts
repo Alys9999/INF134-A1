@@ -77,7 +77,8 @@ class Ctext extends Widget{
     }
 
     set defaulttext(dt: string){
-        this.defaultText=dt;    
+        this._input=dt;    
+        this.update();
     }
 
     set fontSize(size:number){
@@ -85,10 +86,10 @@ class Ctext extends Widget{
         this.update();
     }
 
-    set setInput(text:string){
-        this._input = text;
-        this.update();
-    }
+    // set setInput(text:string){
+    //     this._input = text;
+    //     this.update();
+    // }
 
     get getInput(){
         return this._input;
@@ -115,7 +116,7 @@ class Ctext extends Widget{
     idledownState(): void {
         if(this._focusing){
             this._focusing=false;
-            this._input=this._text.text().slice(0,-1);
+            this._input=this._input.slice(0,-1);
             this.update();
         }
     }
@@ -141,7 +142,7 @@ class Ctext extends Widget{
     }
     keyupState(keyEvent?: KeyboardEvent): void {
         if (this._focusing){
-            this._input=this._text.text() + keyEvent.key;
+            this._input=this._input.slice(0,-1) + keyEvent.key + "|";
             this.update();
             this.raise(new EventArgs(this), new KeypressWidgetState())
         }
